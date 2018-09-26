@@ -1,21 +1,15 @@
 from flask import Flask, request, redirect
 import cgi
+import os
+import jinja2
+
+template_dir = os.path.join(os.path.dirname(__file__), 'templates')
+jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape=True)
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-form = """
-<!doctype html>
-<html>
-    <body>
-        <form action="hello" method="post">
-            <label for="first-name">First Name:</label>
-            <input id="first-name" type="text" name="first_name" />
-            <input type="submit"/>
-        </form>
-    </body>
-</html>
-"""
+
 
 time_form = """
 <style>
@@ -42,15 +36,16 @@ time_form = """
 
 @app.route("/")
 def index():
-    return form
+    template = jinja_env.get_template('hello_form.html')
+    return template.render()
 
 #@app.route in the /hello subdirectory has used a post method from the "form" and renders a string of html + user input  
 
 @app.route ("/hello", methods=['POST'])
 def hello():
     first_name = request.form['first_name']
-    #used cgi.escape to render any html or javascript entered maliciously as content
-    return '<h1>Hello, ' + cgi.escape (first_name) + '</h1>'
+    template = jinja_env.get_template('hello_greeting.html')
+    return template.render(name=first_name)
 
 #app.routes in the /validate-time subdirectory below are specific to the "time_form" above
 
