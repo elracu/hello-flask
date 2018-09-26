@@ -1,9 +1,10 @@
-<!doctype html>
-<head>
-    <title>TODOs</title>
-</head>
-<html>
-    <body>
+<!-- Inserts the content from base.html-->
+
+{% extends "base.html" %}
+
+<!-- defines what will display in the block content that was declared in base.html-->
+
+{% block content %}
         <h1>TODOs</h1>
         <form method="post">
             <label for="first-name">New Task:
@@ -27,5 +28,6 @@
 
         {% endif %}
 
-    </body>
-</html>
+{% endblock %}
+
+<!-- end of block content -->

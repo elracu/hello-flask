@@ -106,6 +106,6 @@ def todos():
 
 
     template = jinja_env.get_template('todos.html')
-    return template.render(tasks=tasks)
+    return template.render(title="TODOs", tasks=tasks)
 
 app.run()
