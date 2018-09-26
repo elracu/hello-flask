@@ -1,0 +1,31 @@
+<!doctype html>
+<head>
+    <title>TODOs</title>
+</head>
+<html>
+    <body>
+        <h1>TODOs</h1>
+        <form method="post">
+            <label for="first-name">New Task:
+                <input type="text" name="task" />
+            </label>        
+            <input type="submit" value='Add Task'/>
+        </form>
+
+        <hr/>
+
+        <!-- conditional using jinja syntax, checking for lenght of tasks list -->
+        {% if tasks|length == 0 %}
+        <p>There's no tasks yet</p>
+
+        {% else %}
+        <ul>
+            {% for task in tasks %}
+            <li>{{task}}</li>
+            {% endfor %}
+        </ul>
+
+        {% endif %}
+
+    </body>
+</html>

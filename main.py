@@ -84,7 +84,7 @@ def validate_time():
     #display form with correct values (if any) and error messages
     else:
         template = jinja_env.get_template('time_form.html')
-    return template.render(hours_error=hours_error, minutes_error=minutes_error, hours=hours, minutes=minutes)
+        return template.render(hours_error=hours_error, minutes_error=minutes_error, hours=hours, minutes=minutes)
 
 #app.route in the /valid-time subdirectory below renders a string of html + user input
 
@@ -93,5 +93,19 @@ def valid_time():
     time = request.args.get('time')
     return '<h1>You submitted {0}. Thanks for submitting a valid time!</h1>'.format(time)
 
+tasks = []
+
+@app.route('/todos', methods=['POST','GET'])
+def todos():
+
+    #check the type of request that's coming in. POST or GET
+
+    if request.method == 'POST':
+        task = request.form['task']
+        tasks.append(task)
+
+
+    template = jinja_env.get_template('todos.html')
+    return template.render(tasks=tasks)
 
 app.run()
