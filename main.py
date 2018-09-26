@@ -1,10 +1,14 @@
-from flask import Flask, request, redirect
+# the render_template module in flask works as a shortcut that can be use to render jinja without using the
+# manual method that has been commented out below. In order for this to work templates should be in a templates
+# directory that is at the same level as the main.py. Also, when using this method autoescape happens by default
+
+from flask import Flask, request, redirect, render_template
 import cgi
 import os
-import jinja2
+# import jinja2
 
-template_dir = os.path.join(os.path.dirname(__file__), 'templates')
-jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape=True)
+# template_dir = os.path.join(os.path.dirname(__file__), 'templates')
+# jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape=True)
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -14,16 +18,14 @@ app.config['DEBUG'] = True
 
 @app.route("/")
 def index():
-    template = jinja_env.get_template('hello_form.html')
-    return template.render()
+    return render_template('hello_form.html')
 
 #@app.route in the /hello subdirectory has used a post method from the "form" and renders a string of html + user input  
 
 @app.route ("/hello", methods=['POST'])
 def hello():
     first_name = request.form['first_name']
-    template = jinja_env.get_template('hello_greeting.html')
-    return template.render(name=first_name)
+    return render_template('hello_greeting.html', name=first_name)
 
 #app.routes in the /validate-time subdirectory below are specific to the "time_form" above
 
@@ -31,8 +33,7 @@ def hello():
 
 @app.route('/validate-time')
 def display_time_form():
-    template = jinja_env.get_template('time_form.html')
-    return template.render()
+    return render_template('time_form.html')
 
 #validate wether hours and minutes submitted can be converted to a string
 
@@ -83,8 +84,7 @@ def validate_time():
 
     #display form with correct values (if any) and error messages
     else:
-        template = jinja_env.get_template('time_form.html')
-        return template.render(hours_error=hours_error, minutes_error=minutes_error, hours=hours, minutes=minutes)
+        return render_template('time_form.html', hours_error=hours_error, minutes_error=minutes_error, hours=hours, minutes=minutes)
 
 #app.route in the /valid-time subdirectory below renders a string of html + user input
 
@@ -105,7 +105,6 @@ def todos():
         tasks.append(task)
 
 
-    template = jinja_env.get_template('todos.html')
-    return template.render(title="TODOs", tasks=tasks)
+    return render_template('todos.html', title="TODOs", tasks=tasks)
 
 app.run()
