@@ -1,4 +1,5 @@
 from flask import Flask, request
+import cgi
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -14,17 +15,24 @@ form = """
         </form>
     </body>
 </html>
-
-
 """
+
+
+#@app.route in the parent directory ("/") runs function def index() which loads form
 
 @app.route("/")
 def index():
     return form
 
+#@app.route in the /hello subdirectory has used a post method from the form and renders a string of html + user input  
+
 @app.route ("/hello", methods=['POST'])
 def hello():
     first_name = request.form['first_name']
-    return '<h1>Hello, ' + first_name + '</h1>'
+    #used cgi.escape to render any html or javascript entered maliciously as content
+    return '<h1>Hello, ' + cgi.escape (first_name) + '</h1>'
+
+
+
 
 app.run()
